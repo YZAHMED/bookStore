@@ -44,7 +44,40 @@ app.post("/books", async (request, response) => {
 
     }
 
+});
+
+app.get("/books", async (request, response)=>{
+    try {
+        const books = await Book.find({});
+        console.log(books.length)
+        return response.status(200).json({
+            "count": books.length,
+            "data": books
+
+        });
+
+        
+    } catch (error) {
+        return response.status(500).send({ message: message.error});
+    }
+
 })
+
+app.get("/books/:id", async (request, response)=>{
+    try {
+
+        const  { id } = request.params;
+
+        const book = await Book.findById(id);
+        return response.status(200).json(book);
+
+        
+    } catch (error) {
+        return response.status(500).json(error.message);
+    }
+
+})
+
 
 mongoose
     .connect(mongoDBURL)
